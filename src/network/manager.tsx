@@ -8,9 +8,6 @@ const getDummyUsers = async (): Promise<UserData[]> => {
     const url = "https://dummyjson.com/users"
     const fetchResult = await fetch(url);
     const jsonResult: GetDummyUserJsonResult = await fetchResult.json();
-    // if (jsonResult.cod) {
-    //   throw Error(jsonResult.message);
-    // }  
     return jsonResult.users;
   };
   

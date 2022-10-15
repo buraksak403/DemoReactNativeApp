@@ -18,10 +18,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { UserData } from './src/store/user/models';
 import { Provider } from 'react-redux';
 import configureStore from './src/store';
+import AddUser from './src/screens/AddUser';
 
 export type RootStackParamList = {
   Listing: undefined;
   Detail: { item: UserData };
+  AddUser: undefined
 };
 
 const App = () => {
@@ -32,9 +34,10 @@ const App = () => {
     <Provider store={store} >
       <SafeAreaView style={{ flex: 1 }}>
         <NavigationContainer>
-          <RootStack.Navigator initialRouteName="Listing">
+          <RootStack.Navigator initialRouteName='Listing'>
             <RootStack.Screen name="Listing" component={Listing} />
             <RootStack.Screen name="Detail" component={Detail} />
+            <RootStack.Screen name="AddUser" component={AddUser} />
           </RootStack.Navigator>
         </NavigationContainer>
       </SafeAreaView>

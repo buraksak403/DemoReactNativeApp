@@ -1,4 +1,4 @@
-import { Text, SafeAreaView, Button, Alert, FlatList, View, TouchableOpacity } from 'react-native'
+import { Text, SafeAreaView, Button, Alert, FlatList, View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
@@ -9,17 +9,22 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { AppState } from '../../store';
 import { addUser, deleteUser, setUsers } from '../../store/user/actions';
+import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Listing'>;
 
 const Listing: React.FC<Props & AppProps> = (props) => {
+  const [loading, setLoading] = useState<boolean>(true)
+
   useEffect(() => {
     const fetchUsers = async (): Promise<void> => {
       try {
         const data = await userService.getDummyUsers();
         props.setUsers(data)
+        setLoading(false)
       } catch (error) {
         Alert.alert('Error occured');
+        setLoading(false)
       }
     };
     fetchUsers();
@@ -30,32 +35,28 @@ const Listing: React.FC<Props & AppProps> = (props) => {
   }
 
   return (
-    <SafeAreaView style={{}}>
-      <FlatList
-        data={props.user.users}
-        numColumns={2}
-        columnWrapperStyle={{
-          flex: 1,
-          justifyContent: 'space-evenly',
-        }}
-        renderItem={({ item }) =>
-          <ListItem
-            item={item}
-            onClick={onItemClick}
-            onDeleteClick={(id) => props.deleteUser(id)}
-          />}
-        keyExtractor={(item) => String(item.id)}
-      />
-      <TouchableOpacity style={{
-        backgroundColor: '#000000',
-        position: 'absolute',
-        bottom: 10, height: 50, width: 300,
-        alignSelf: 'center',
-        justifyContent: 'center',
-        borderRadius: 10
-      }} >
-        <Text style={{ color: '#FFFFFF', fontSize: 20, textAlign: 'center' }} >Add User</Text>
-      </TouchableOpacity>
+    <SafeAreaView>
+      {loading ? <ActivityIndicator /> :
+        <View>
+          <FlatList
+            data={props.user.users}
+            numColumns={2}
+            contentContainerStyle={{ paddingBottom: 100 }}
+            columnWrapperStyle={styles.flatListColumnWrapperStyle}
+            renderItem={({ item }) =>
+              <ListItem
+                item={item}
+                onClick={onItemClick}
+                onDeleteClick={(id) => props.deleteUser(id)}
+              />}
+            keyExtractor={(item) => String(item.id)}
+          />
+          <TouchableOpacity
+            style={styles.addUserButton}
+            onPress={() => props.navigation.navigate('AddUser')}>
+            <Text style={styles.addUserButtonText} >Add User</Text>
+          </TouchableOpacity>
+        </View>}
     </SafeAreaView>
   )
 }

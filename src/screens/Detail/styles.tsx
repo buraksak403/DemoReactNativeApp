@@ -5,7 +5,8 @@ const styles = StyleSheet.create({
     infoText: {
         fontSize: 12,
         marginBottom: 10
-    }
+    },
+    containerView: { alignItems: 'center', flex: 1 }
 })
 
 export default styles

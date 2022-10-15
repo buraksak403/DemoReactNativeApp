@@ -2,7 +2,7 @@ import { Text, SafeAreaView, Button, Image } from 'react-native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react'
 import { RootStackParamList } from '../../../App'
-import styles from './style';
+import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Detail'>;
 
@@ -11,7 +11,7 @@ const Detail: React.FC<Props> = (props) => {
     const { address, department, title, name } = company
 
     return (
-        <SafeAreaView style={{ alignItems: 'center', flex: 1 }}>
+        <SafeAreaView style={styles.containerView}>
             <Image source={{ uri: image }} style={styles.image} />
             <Text style={styles.infoText} >First Name: {firstName}</Text>
             <Text style={styles.infoText} >Last Name: {lastName}</Text>
