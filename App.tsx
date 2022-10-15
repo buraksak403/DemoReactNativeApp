@@ -11,12 +11,12 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { Provider } from 'react-redux';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Listing from './src/screens/Listing';
 import Detail from './src/screens/Detail';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { UserData } from './src/store/user/models';
-import { Provider } from 'react-redux';
 import configureStore from './src/store';
 import AddUser from './src/screens/AddUser';
 

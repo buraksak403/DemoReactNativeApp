@@ -15,8 +15,9 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         justifyContent: 'center',
         borderRadius: 10,
-        marginTop: 100
-    }
+        marginTop: 40
+    },
+    addButtonText: { color: '#FFFFFF', fontSize: 20, textAlign: 'center' }
 })
 
 export default styles

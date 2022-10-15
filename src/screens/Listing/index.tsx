@@ -1,19 +1,20 @@
 import { Text, SafeAreaView, Button, Alert, FlatList, View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+
 import { RootStackParamList } from '../../../App';
 import { userService } from '../../network/manager';
 import ListItem from './ListItem';
 import { UserData } from '../../store/user/models';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
 import { AppState } from '../../store';
 import { addUser, deleteUser, setUsers } from '../../store/user/actions';
 import styles from './styles';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Listing'>;
 
-const Listing: React.FC<Props & AppProps> = (props) => {
+const Listing: React.FC<Props & ReduxProps> = (props) => {
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
@@ -67,7 +68,7 @@ const mapStateToProps = (state: AppState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators({ addUser, deleteUser, setUsers }, dispatch);
 
-type AppProps = ReturnType<typeof mapStateToProps> &
+type ReduxProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
 export default connect(

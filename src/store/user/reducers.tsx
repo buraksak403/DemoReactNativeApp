@@ -4,6 +4,7 @@ import { UserActionTypes, ADD_USER, DELETE_USER, SET_USERS } from './actionTypes
 const initialState: UserState = {
     users: [],
 };
+
 export function userReducer(
     state = initialState,
     action: UserActionTypes,

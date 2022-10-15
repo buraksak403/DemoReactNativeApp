@@ -8,14 +8,17 @@ interface AddUserAction {
     type: typeof ADD_USER;
     payload: UserData;
 }
+
 interface DeleteUserAction {
     type: typeof DELETE_USER;
     payload: {
         id: number
     }
 }
+
 interface SetUsers {
     type: typeof SET_USERS;
     payload: UserData[];
 }
+
 export type UserActionTypes = AddUserAction | DeleteUserAction | SetUsers;
