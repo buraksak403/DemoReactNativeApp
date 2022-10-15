@@ -15,7 +15,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import Listing from './src/screens/Listing';
 import Detail from './src/screens/Detail';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { UserData } from './src/network/manager';
+import { UserData } from './src/store/user/models';
+import { Provider } from 'react-redux';
+import configureStore from './src/store';
 
 export type RootStackParamList = {
   Listing: undefined;
@@ -24,16 +26,19 @@ export type RootStackParamList = {
 
 const App = () => {
   const RootStack = createNativeStackNavigator<RootStackParamList>();
+  const store = configureStore();
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <NavigationContainer>
-        <RootStack.Navigator initialRouteName="Listing">
-          <RootStack.Screen name="Listing" component={Listing} />
-          <RootStack.Screen name="Detail" component={Detail} />
-        </RootStack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <Provider store={store} >
+      <SafeAreaView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <RootStack.Navigator initialRouteName="Listing">
+            <RootStack.Screen name="Listing" component={Listing} />
+            <RootStack.Screen name="Detail" component={Detail} />
+          </RootStack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </Provider>
   );
 };
 

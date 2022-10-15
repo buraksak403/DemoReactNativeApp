@@ -1,25 +1,28 @@
-import { Text, SafeAreaView, Button, Alert, FlatList, View } from 'react-native'
+import { Text, SafeAreaView, Button, Alert, FlatList, View, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
-import { userService, UserData } from '../../network/manager';
+import { userService } from '../../network/manager';
 import ListItem from './ListItem';
+import { UserData } from '../../store/user/models';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { AppState } from '../../store';
+import { addUser, deleteUser, setUsers } from '../../store/user/actions';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Listing'>;
 
-const Listing: React.FC<Props> = (props) => {
-  const [users, setUsers] = useState<UserData[]>()
-
+const Listing: React.FC<Props & AppProps> = (props) => {
   useEffect(() => {
-    const refresh = async (): Promise<void> => {
+    const fetchUsers = async (): Promise<void> => {
       try {
         const data = await userService.getDummyUsers();
-        setUsers(data)
+        props.setUsers(data)
       } catch (error) {
         Alert.alert('Error occured');
       }
     };
-    refresh();
+    fetchUsers();
   }, []);
 
   const onItemClick = (item: UserData) => {
@@ -29,17 +32,44 @@ const Listing: React.FC<Props> = (props) => {
   return (
     <SafeAreaView style={{}}>
       <FlatList
-        data={users}
+        data={props.user.users}
         numColumns={2}
         columnWrapperStyle={{
           flex: 1,
           justifyContent: 'space-evenly',
         }}
-        renderItem={({ item }) => <ListItem item={item} onClick={onItemClick} />}
+        renderItem={({ item }) =>
+          <ListItem
+            item={item}
+            onClick={onItemClick}
+            onDeleteClick={(id) => props.deleteUser(id)}
+          />}
         keyExtractor={(item) => String(item.id)}
       />
+      <TouchableOpacity style={{
+        backgroundColor: '#000000',
+        position: 'absolute',
+        bottom: 10, height: 50, width: 300,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        borderRadius: 10
+      }} >
+        <Text style={{ color: '#FFFFFF', fontSize: 20, textAlign: 'center' }} >Add User</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }
 
-export default Listing
+const mapStateToProps = (state: AppState) => ({
+  user: state.user
+});
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators({ addUser, deleteUser, setUsers }, dispatch);
+
+type AppProps = ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps>;
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Listing);
